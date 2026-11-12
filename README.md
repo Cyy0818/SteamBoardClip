@@ -15,7 +15,13 @@
 
 ## 下载运行
 
-下载发布包，解压到任意位置，运行 `SteamBoardClip.exe`。不需要另外安装任何东西，ffmpeg 已内置。
+1. 在 [Releases](https://github.com/Cyy0818/SteamBoardClip/releases) 页面下载 `SteamBoardClip-v1.0.0-windows-x64.zip`。
+2. 在压缩包上点击右键，选择"全部解压缩"，把整个 `SteamBoardClip` 文件夹解压到任意位置。
+3. 打开解压出来的 `SteamBoardClip` 文件夹，双击 `SteamBoardClip.exe`。
+
+文件夹里有 `SteamBoardClip.exe` 与 `_internal` 文件夹，两者必须放在一起。`_internal` 里是程序运行需要的文件，单独把 exe 拿出来或者在压缩包里直接双击，程序都无法启动。
+
+不需要另外安装任何东西，ffmpeg 已内置。
 
 运行要求：Windows 10/11 64 位。窗口显示需要支持 OpenGL 3 的显卡驱动；不需要独立显卡，也不使用 CUDA。
 

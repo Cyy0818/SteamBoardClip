@@ -21,7 +21,17 @@ Steam profile showcase, then upload them to the Steam workshop.
 
 ## Download and run
 
-Download the release, unzip it anywhere and run `SteamBoardClip.exe`.
+1. Download `SteamBoardClip-v1.0.0-windows-x64.zip` from the
+   [Releases](https://github.com/Cyy0818/SteamBoardClip/releases) page.
+2. Right-click the zip, choose "Extract All", and extract the whole
+   `SteamBoardClip` folder anywhere.
+3. Open the extracted `SteamBoardClip` folder and double-click `SteamBoardClip.exe`.
+
+The folder holds `SteamBoardClip.exe` and an `_internal` folder, and the two
+must stay together. `_internal` contains the files the program needs to run, so
+the program does not start when the exe is moved out on its own or
+double-clicked inside the zip.
+
 Nothing else needs to be installed: ffmpeg is bundled.
 
 Requirements: Windows 10/11, 64-bit. A graphics driver with OpenGL 3 is needed

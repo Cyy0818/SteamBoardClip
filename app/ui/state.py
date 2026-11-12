@@ -28,6 +28,7 @@ class AppState:
         self.language = saved.language
         self.output_dir = saved.output_dir or paths.default_output_dir()
         self.prefix = saved.prefix
+        self.use_title = saved.use_title
         self.workshop_title = saved.workshop_title
         self.browser = saved.browser
         self.keep_aspect = saved.keep_aspect
@@ -71,7 +72,7 @@ class AppState:
         custom_dir = "" if self.output_dir == paths.default_output_dir() else self.output_dir
         return settings_store.Settings(
             language=self.language, output_dir=custom_dir, prefix=self.prefix,
-            workshop_title=self.workshop_title, browser=self.browser,
+            use_title=self.use_title, workshop_title=self.workshop_title, browser=self.browser,
             keep_aspect=self.keep_aspect, show_guides=self.show_guides,
             fps_limit=self.fps_limit, scale_percent=self.scale_percent,
             colors=self.colors, limit_mb=self.limit_mb,
@@ -155,9 +156,14 @@ class AppState:
         self._start(split_worker, job)
 
     def start_upload(self) -> None:
+        # 没有打开"显示标题"时传入空标题，上传的条目不显示名称。
+        title = self.workshop_title.strip() if self.use_title else ""
+        if self.use_title and not title:
+            self.say("err_title_empty", error=True)
+            return
         job = UploadJob(
             gif_paths=planning.output_paths(self.output_dir.strip(), self.prefix.strip()),
-            title=self.workshop_title.strip(), browser=self.browser,
+            browser=self.browser, title=title,
         )
         self._start(upload_worker, job)
 

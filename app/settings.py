@@ -17,6 +17,7 @@ class Settings:
     language: str = "zh"
     output_dir: str = ""  # 空字符串表示程序旁边的 output 文件夹
     prefix: str = config.DEFAULT_OUTPUT_PREFIX
+    use_title: bool = False  # 关闭时上传的条目不显示名称
     workshop_title: str = config.DEFAULT_WORKSHOP_TITLE
     browser: str = config.BROWSERS[0]
     keep_aspect: bool = True

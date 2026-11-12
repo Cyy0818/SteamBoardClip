@@ -191,20 +191,26 @@ def test_reporter_events_and_cancel(reporting):
 
 def test_upload_job_titles(tmp_path):
     gifs = tuple(str(tmp_path / f"g_part{i}.gif") for i in range(1, 6))
-    job = UploadJob(gifs, "gif", "Chrome")
+    job = UploadJob(gifs, "Chrome", title="gif")
     assert [job.item_title(i) for i in range(1, 6)] == [f"gif_{i}" for i in range(1, 6)]
+    assert UploadJob(gifs).title == ""  # 默认不显示标题
 
 
 def test_upload_worker_validates_before_opening_a_browser(tmp_path, reporting):
     reporter, drain, _ = reporting
-    upload_worker(UploadJob((str(tmp_path / "missing_part1.gif"),), "gif"), reporter)
+    upload_worker(UploadJob((str(tmp_path / "missing_part1.gif"),)), reporter)
     last = drain()[-1]
     assert (last.kind, last.key) == (events.ERROR, "err_missing_gifs")
 
-    present = tmp_path / "a_part1.gif"
-    Image.new("P", (4, 4)).save(present, format="GIF")
-    upload_worker(UploadJob((str(present),), "  "), reporter)
-    assert drain()[-1].key == "err_title_empty"
+
+def test_title_option_in_state(tmp_path):
+    from app.ui.state import AppState
+
+    state = AppState(settings.Settings(output_dir=str(tmp_path), use_title=True, workshop_title="  "))
+    state.start_upload()
+    assert state.status[0] == "err_title_empty" and not state.busy
+    saved = state.to_settings()
+    assert saved.use_title is True and settings.Settings().use_title is False
 
 
 def test_read_credentials(tmp_path):

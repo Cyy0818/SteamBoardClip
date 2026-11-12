@@ -15,7 +15,7 @@ _SHOWCASE_FIELDS_JS = """
     $J('[name=file_type]').val(0);
     $J('[name=visibility]').val(0);
 """
-# 提交之前把标题替换成空白字符，展柜里的条目下方不显示名称。
+# 没有填写标题时使用：提交之前把标题替换成空白字符，展柜里的条目下方不显示名称。
 # v_trim 被替换成原样返回，页面提交时不会把空白标题裁掉。
 _BLANK_TITLE_JS = (
     "v_trim=_=>{return _},"
@@ -66,19 +66,21 @@ def _wait_for_login(driver, reporter: Reporter) -> None:
         reporter.wait(0.5)
 
 
-def _upload_one(driver, title: str, gif_path: str) -> None:
+def _upload_one(driver, job, index: int, gif_path: str) -> None:
     from selenium.common.exceptions import TimeoutException
     from selenium.webdriver.common.by import By
     from selenium.webdriver.support.ui import WebDriverWait
 
     wait = WebDriverWait(driver, config.PAGE_LOAD_TIMEOUT_S)
     title_field = wait.until(lambda d: d.find_element(By.CLASS_NAME, "titleField"))
-    title_field.clear()
-    title_field.send_keys(title)
+    if job.title:
+        title_field.clear()
+        title_field.send_keys(job.item_title(index))
     driver.find_element(By.ID, "file").send_keys(os.path.abspath(gif_path))
     driver.find_element(By.ID, "agree_terms").click()
     driver.execute_script(_SHOWCASE_FIELDS_JS)
-    driver.execute_script(_BLANK_TITLE_JS)
+    if not job.title:
+        driver.execute_script(_BLANK_TITLE_JS)
     driver.find_element(By.XPATH, '//*[@id="SubmitItemForm"]/div[6]/a[2]').click()
     # 条目创建成功之后 Steam 会离开编辑页面。
     try:
@@ -86,7 +88,7 @@ def _upload_one(driver, title: str, gif_path: str) -> None:
             lambda d: d.current_url != config.STEAM_EDIT_URL
         )
     except TimeoutException as error:
-        raise planning.JobError("err_submit_timeout", title=title) from error
+        raise planning.JobError("err_submit_timeout", index=index) from error
 
 
 def run(job, reporter: Reporter) -> None:
@@ -116,5 +118,5 @@ def _upload_all(driver, job, reporter: Reporter) -> None:
         reporter.log("log_uploading", index=index, total=total)
         if index > 1:
             driver.get(config.STEAM_EDIT_URL)
-        _upload_one(driver, job.item_title(index), gif_path)
+        _upload_one(driver, job, index, gif_path)
         reporter.progress(index / total)

@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 @dataclass(frozen=True)
 class UploadJob:
     gif_paths: tuple[str, ...]
-    title: str
     browser: str = config.BROWSERS[0]
+    title: str = ""  # 空字符串表示条目不显示名称
 
     def item_title(self, index: int) -> str:
         return f"{self.title}_{index}"
@@ -30,8 +30,6 @@ def upload_worker(job: UploadJob, reporter: Reporter) -> None:
         for path in job.gif_paths:
             if not os.path.isfile(path):
                 raise planning.JobError("err_missing_gifs", name=os.path.basename(path))
-        if not job.title.strip():
-            raise planning.JobError("err_title_empty")
         selenium_backend.run(job, reporter)
     except Cancelled:
         reporter.cancelled()

@@ -76,7 +76,12 @@ stretch the whole frame instead.
 ## Uploading to Steam
 
 **Upload** opens the Steam workshop upload page in Edge or Chrome and creates
-five items named `<title>_1` … `<title>_5`.
+five items one after another.
+
+- **Show titles** off (default): each title is replaced with blank characters
+  before the item is submitted, so no name is shown under the showcase slots.
+- **Show titles** on: enter a title and the five items are named
+  `<title>_1` … `<title>_5`.
 
 - Sign in to Steam in the browser window that opens. The app waits up to five
   minutes for you.
@@ -95,30 +100,6 @@ five items named `<title>_1` … `<title>_5`.
 - A render never holds more than 2400 frames in memory (about 550 MB).
 - The preview decodes at most 20 frames per second and the window stops
   redrawing when nothing is playing.
-
-## Run from source
-
-```bash
-pip install -r requirements.txt
-python SteamBoardClip.py
-```
-
-Python 3.10 or newer.
-
-## Build the executable
-
-```powershell
-pip install -r requirements-dev.txt
-.\build.ps1
-```
-
-The app is written to `dist\SteamBoardClip\`. Distribute the whole folder.
-
-## Tests
-
-```bash
-python -m pytest tests
-```
 
 ## Project layout
 

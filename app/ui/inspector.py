@@ -170,8 +170,14 @@ def _result_rows(state: AppState, t, inner: float) -> None:
 
 def _upload_rows(state: AppState, t, inner: float) -> None:
     _group(t("group_upload"), inner)
-    _label(t("title"), inner)
-    _, state.workshop_title = imgui.input_text("##title", state.workshop_title)
+    imgui.align_text_to_frame_padding()
+    widgets.text(t("use_title"), theme.TEXT_SOFT)
+    imgui.same_line(inner - px(30))
+    imgui.set_cursor_pos_y(imgui.get_cursor_pos_y() + px(6))
+    _, state.use_title = widgets.toggle("##use_title", state.use_title)
+    if state.use_title:
+        _label(t("title"), inner)
+        _, state.workshop_title = imgui.input_text("##title", state.workshop_title)
     _label(t("browser"), inner)
     state.browser = _combo("##browser", state.browser, config.BROWSERS, list(config.BROWSERS))
 

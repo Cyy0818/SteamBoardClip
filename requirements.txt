@@ -1,0 +1,8 @@
+imgui-bundle>=1.92
+moviepy>=2.0
+opencv-python>=4.8
+pillow>=10.0
+numpy
+imageio>=2.35
+imageio-ffmpeg
+selenium>=4.20

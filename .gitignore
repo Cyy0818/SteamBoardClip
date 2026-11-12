@@ -1,0 +1,22 @@
+# 运行与测试时产生的文件
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+
+# 打包产生的文件
+build/
+dist/
+SteamBoardClip.spec
+
+# 程序的输出与本机的登录信息
+output/
+user.txt
+
+# 与代码无关的文件
+.agent_tmp/
+.claude/
+.idea/
+AGENTS.md
+docs/demo.mp4
+docs/ui-mockup.svg
